@@ -68,5 +68,3 @@ make test
 
 This runs the test suite inside a Node 18 container and avoids Windows libuv issues.
 
----
-If you'd like, I can now: (A) implement the `CredentialAnchor` contract and unit tests, (B) scaffold the issuer backend (Node + Veramo), or (C) scaffold the wallet app. Which should I start next?
