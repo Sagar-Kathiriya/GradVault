@@ -83,24 +83,5 @@ make test
 
 This runs the test suite inside a Node 18 container and avoids Windows libuv issues.
 
-## Current Local Dev Workflow (summary)
-
-- Start Hardhat node (Terminal A):
-   - `cd "s:\5th Semester\Blockchain\GradVault"`
-   - `npx hardhat node`
-- Deploy `CredentialAnchor` (Terminal B):
-   - `npx hardhat run --network localhost scripts/deploy.js` → copy printed address
-- Configure issuer API (Terminal C):
-   - `cd services/issuer-api`
-   - `copy .env.example .env` and set `PRIVATE_KEY` (include 0x) and `CONTRACT_ADDRESS`
-   - `npm install`
-   - `npm start`
-- Issue credential:
-   - `curl -s -X POST http://localhost:3001/issue -H "Content-Type: application/json" -d '{"subject":"did:example:stu1","degree":"BSc"}'`
-- Anchor credential (replace `<anchorHash>` from issue response):
-   - `curl -s -X POST http://localhost:3001/anchor -H "Content-Type: application/json" -d '{"anchorHash":"<anchorHash>","credentialId":"cred-001"}'`
-- Check status:
-   - `curl -s http://localhost:3001/status/<anchorHash>`
-
-If the Hardhat node crashes with a libuv assertion on Windows, close all terminals and retry in a fresh PowerShell session; if it persists, reboot or use Docker/WSL2.
-
+---
+If you'd like, I can now: (A) implement the `CredentialAnchor` contract and unit tests, (B) scaffold the issuer backend (Node + Veramo), or (C) scaffold the wallet app. Which should I start next?
