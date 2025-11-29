@@ -2,14 +2,17 @@
   "name": "issuer-api",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.10.0",
+    "express": "^4.19.2",
+    "ipfs-http-client": "^60.0.0",
     "axios": "^1.6.0",
-    "dotenv": "^16.3.1",
-    "ethers": "^6.9.0",
-    "express": "^4.18.2",
     "uuid": "^9.0.0"
   }
 }
