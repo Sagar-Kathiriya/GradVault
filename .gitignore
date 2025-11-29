@@ -4,6 +4,9 @@ artifacts/
 cache/
 .env
 .env.*
-/.idea
+/idea
 .vscode
-package-lock.json
+# Allow lock file for reproducible CI installs
+# (previously ignored, needed by GitHub Actions cache)
+# Remove the following line to keep lock file tracked
+# package-lock.json
