@@ -1,4 +1,4 @@
-# GradVault
+# GradVault ![CI](https://github.com/Sagar-Kathiriya/GradVault/actions/workflows/ci.yml/badge.svg)
 
 GradVault is a blockchain-based decentralized application to enable universities to issue verifiable digital degree certificates under Self-Sovereign Identity (SSI) principles. No private or sensitive data is stored on-chain — only cryptographic anchors (hashes) are recorded. Students hold credentials in their wallet and present selective disclosures or zero-knowledge proofs to verifiers.
 
