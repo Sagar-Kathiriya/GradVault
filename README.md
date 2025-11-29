@@ -109,15 +109,15 @@ Estimate for a minimal end-to-end MVP: 2–3 weeks (single developer).
 
 Local development has been validated end-to-end up to issuing credentials; anchoring works with a running Hardhat node and correctly configured `.env`.
 
-## Next Immediate Tasks
-- Ensure Hardhat local node is started reliably on Windows (libuv assertion workaround: restart terminal or reboot if needed).
-- Stabilize `scripts/anchor-example.js` for ethers v6 (done: uses `anchorCredential(bytes32)` matching current contract ABI; no `addIssuer`).
-- Confirm `services/issuer-api/.env` uses a valid Hardhat account `PRIVATE_KEY` (including `0x`) and the latest `CONTRACT_ADDRESS` from deploy.
-- Run `POST /anchor` successfully and document the typical response (txHash, blockNumber). Add a `curl` example to README.
-- Add revocation endpoint to issuer API: `POST /revoke { anchorHash }` using `revokeAnchor`.
-- Add minimal persistence (optional): store issued credential payloads and their anchor hashes (e.g., a JSON file or lightweight DB for demo).
-- Write a short architecture doc in `docs/` outlining VC issuance/signing, anchor process, and verifier checks.
-- Future: integrate proper VC signing (JWT or Linked Data Proofs), DID management, and BBS+/ZK selective disclosure.
+## Project Status
+MVP scope complete and frozen for presentation:
+- Contracts: `IssuerRegistry` and `CredentialAnchor` deployed & tested.
+- Scripts: deploy, register issuer, anchor, verify, revoke working.
+- Issuer API: issue demo credential, anchor hash, query status, revoke.
+- Documentation: README (non-technical sections) + one-pager.
+- Release tag: `v0.1.0` published.
+
+No further features (VC signing, selective disclosure, ZK proofs) will be added in this version; they remain future roadmap items only.
 
 ## Run tests with Docker (no local Node required)
 
