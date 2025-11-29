@@ -1,34 +1,26 @@
-const hre = require('hardhat');
+const hre = require("hardhat");
 
 async function main() {
-  // Use the newer Hardhat/Ethers v6 deployment API when available
-  if (hre.ethers && typeof hre.ethers.deployContract === 'function') {
-    const ca = await hre.ethers.deployContract('CredentialAnchor');
-    // wait for deployment
-    if (typeof ca.waitForDeployment === 'function') {
-      await ca.waitForDeployment();
-    }
-    // get address (ethers v6 contract API)
-    const address = (typeof ca.getAddress === 'function') ? await ca.getAddress() : ca.target || ca.address;
-    console.log('CredentialAnchor deployed to:', address);
-    return;
-  }
+  const [deployer] = await hre.ethers.getSigners();
+  console.log("Deploying with:", deployer.address);
 
-  // Fallback for older ethers API
-  const CredentialAnchor = await hre.ethers.getContractFactory('CredentialAnchor');
-  const ca = await CredentialAnchor.deploy();
-  if (typeof ca.deployed === 'function') {
-    await ca.deployed();
-    console.log('CredentialAnchor deployed to:', ca.address);
-    return;
-  }
+  // Deploy IssuerRegistry
+  const IssuerRegistry = await hre.ethers.getContractFactory("IssuerRegistry");
+  const registry = await IssuerRegistry.deploy();
+  await registry.waitForDeployment();
+  const registryAddress = await registry.getAddress();
+  console.log("IssuerRegistry:", registryAddress);
 
-  // final fallback: wait for the deployment transaction
-  if (ca.deployTransaction && typeof ca.deployTransaction.wait === 'function') {
-    const receipt = await ca.deployTransaction.wait();
-    console.log('CredentialAnchor deployed to:', receipt.contractAddress || ca.address || ca.target);
-    return;
-  }
+  // Deploy CredentialAnchor with registry address
+  const CredentialAnchor = await hre.ethers.getContractFactory("CredentialAnchor");
+  const anchor = await CredentialAnchor.deploy(registryAddress);
+  await anchor.waitForDeployment();
+  const anchorAddress = await anchor.getAddress();
+  console.log("CredentialAnchor:", anchorAddress);
+
+  console.log("\nExport these to services/issuer-api/.env:");
+  console.log("CREDENTIAL_ANCHOR_ADDRESS=", anchorAddress);
+  console.log("RPC_URL=", hre.network.config.url || "http://localhost:8545");
 }
 
 main().catch((error) => {

@@ -2,14 +2,21 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("CredentialAnchor", function () {
-  let CredentialAnchor;
-  let contract;
+  let IssuerRegistry, CredentialAnchor;
+  let registry, contract;
   let owner, issuer, other;
 
   beforeEach(async function () {
     [owner, issuer, other] = await ethers.getSigners();
+    IssuerRegistry = await ethers.getContractFactory("IssuerRegistry");
+    registry = await IssuerRegistry.connect(owner).deploy();
+    await registry.waitForDeployment();
+
+    // register issuer
+    await registry.connect(owner).registerIssuer(issuer.address, "did:example:uni-issuer");
+
     CredentialAnchor = await ethers.getContractFactory("CredentialAnchor");
-    contract = await CredentialAnchor.connect(owner).deploy();
+    contract = await CredentialAnchor.connect(owner).deploy(await registry.getAddress());
     await contract.waitForDeployment();
   });
 
@@ -26,6 +33,11 @@ describe("CredentialAnchor", function () {
 
     // cannot anchor same again
     await expect(contract.connect(issuer).anchorCredential(hash)).to.be.revertedWith("already anchored");
+
+    // unauthorized address cannot anchor
+    const data2 = ethers.toUtf8Bytes("degree:dave");
+    const hash2 = ethers.keccak256(data2);
+    await expect(contract.connect(other).anchorCredential(hash2)).to.be.revertedWith("issuer not authorized");
   });
 
   it("allows issuer or owner to revoke", async function () {

@@ -1,8 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+interface IIssuerRegistry {
+    function isIssuer(address issuer) external view returns (bool);
+}
+
 contract CredentialAnchor {
     address public owner;
+    IIssuerRegistry public registry;
 
     struct Anchor {
         address issuer;
@@ -20,12 +25,14 @@ contract CredentialAnchor {
         _;
     }
 
-    constructor() {
+    constructor(address _registry) {
         owner = msg.sender;
+        registry = IIssuerRegistry(_registry);
     }
 
     function anchorCredential(bytes32 _anchor) external {
         require(anchors[_anchor].timestamp == 0, "already anchored");
+        require(address(registry) != address(0) && registry.isIssuer(msg.sender), "issuer not authorized");
         anchors[_anchor] = Anchor({issuer: msg.sender, timestamp: block.timestamp, revoked: false});
         emit Anchored(_anchor, msg.sender, block.timestamp);
     }

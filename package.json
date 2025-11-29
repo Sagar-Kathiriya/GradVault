@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js",
+    "register:issuer": "REGISTRY_ADDRESS=0x0000000000000000000000000000000000000000 hardhat run scripts/register-issuer.js",
+    "write-env": "node scripts/write-env.js"
   },
   "devDependencies": {
     "hardhat": "^2.16.0",
